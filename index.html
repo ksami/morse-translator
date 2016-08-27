@@ -1,18 +1,57 @@
 <html>
+  <!-- whatchu lookin at?-->
+
+  <!-- author: ksami -->
+  <!-- site: github.com/ksami -->
   
   <head>
     <meta http-equiv="Content-Type" content="text/html;charset=ISO-8859-1">
-    <title>morse</title>
+    <title>MorseTap</title>
+    <style type="text/css">
+      input {
+        width: 50px;
+      }
+      table {
+        margin-top: 50px;
+      }
+      textarea {
+        width: 100%;
+      }
+      #footer {
+        margin-top: 50px;
+        text-align: right;
+      }
+    </style>
   </head>
   
   <body>
     <h1>Morse Code Tapping Translator</h1>
+    <div>
+      <p>Tap the TAP button for "dot", tap and hold for "dash", 
+         pause for a break in character, longer pause for word.</p>
+      <p>Durations can be configured below.</p>
+      <p>Website optimized for anything except humans.</p>
+    </div>
+
     <table>
       <tr>
         <td colspan="4">
           <label>
             Input
-            <textarea style="width: 100%" id="inputTextbox"></textarea>
+            <textarea id="inputTextbox"></textarea>
+          </label>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <button onmousedown="handlerMouseDown()" onmouseup="handlerMouseUp()" style="font-size: 36pt">TAP</button>
+        </td>
+      </tr>
+      <tr>
+        <td colspan="4">
+          <label>
+            Output
+            <textarea id="outputTextbox"></textarea>
           </label>
         </td>
       </tr>
@@ -21,34 +60,43 @@
           <button onclick="handlerParse()">Translate</button>
         </td>
       </tr>
+    </table>
+
+    <table>
       <tr>
-        <td colspan="4">
-          <label>
-            Output
-            <textarea style="width: 100%" id="outputTextbox"></textarea>
-          </label>
+        <td>
+          Is "dash" after holding for:
+        </td>
+        <td>
+          <input type="text" id="durationDash"></input> ms
         </td>
       </tr>
       <tr>
         <td>
-          durationDash: <input type="text" id="durationDash"></input>
+          Separate as character after:
         </td>
         <td>
-          durationPauseChar: <input type="text" id="durationPauseChar"></input>
+          <input type="text" id="durationPauseChar"></input> ms
+        </td>
+      </tr>
+      <tr>
+        <td>
+          Separate as word after:
         </td>
         <td>
-          durationPauseWord: <input type="text" id="durationPauseWord"></input>
+          <input type="text" id="durationPauseWord"></input> ms
         </td>
+      </tr>
+      <tr>
         <td>
           <button onclick="handlerSetDurations()">Apply</button>
         </td>
       </tr>
-      <tr>
-        <td>
-          <button onmousedown="handlerMouseDown()" onmouseup="handlerMouseUp()" style="font-size: 36pt">TAP</button>
-        </td>
-      </tr>
     </table>
+
+    <div id="footer">
+      <p>ksami - 2016</p>
+    </div>
   </body>
 
   <script type="text/javascript">
@@ -76,6 +124,8 @@
 
 
     (function() {
+      console.log("whatchu lookin at?");
+
       domInputTextbox = document.getElementById("inputTextbox");
       domOutputTextbox = document.getElementById("outputTextbox");
       domDurationDash = document.getElementById("durationDash");
@@ -157,6 +207,10 @@
         var chars = words[i].split(SEP_CHAR);
 
         for(var j=0; j<chars.length; j++) {
+          if(chars[j] === "") {
+            continue;
+          }
+
           var char = MORSE_MAP[chars[j]];
           if(char === undefined) {
             result += CHAR_UNDEFINED;
