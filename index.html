@@ -1,0 +1,127 @@
+<html>
+  
+  <head>
+    <meta http-equiv="Content-Type" content="text/html;charset=ISO-8859-1">
+    <title>morse</title>
+  </head>
+  
+  <body>
+    <table>
+      <tr>
+        <td colspan="4">
+          <textarea id="textbox"></textarea>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          durationDash: <input type="text" id="durationDash"></input>
+        </td>
+        <td>
+          durationPauseChar: <input type="text" id="durationPauseChar"></input>
+        </td>
+        <td>
+          durationPauseWord: <input type="text" id="durationPauseWord"></input>
+        </td>
+        <td>
+          <button onclick="handlerSetDurations()">Apply</button>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <button onmousedown="handlerMouseDown()" onmouseup="handlerMouseUp()" style="font-size: 36pt">TAP</button>
+        </td>
+      </tr>
+    </table>
+  </body>
+
+  <script type="text/javascript">
+    var CHAR_DOT = ".";
+    var CHAR_DASH = "-";
+    var SEP_CHAR = " ";
+    var SEP_WORD = "/ ";
+
+    var durationDash = 200;  //ms
+    var durationPauseChar = 350;  //ms
+    var durationPauseWord = 550;  //ms
+    var timeLastMouseUp;
+    var timeMouseDown;
+    var timeMouseUp;
+
+    var timerCharPause;
+    var timerWordPause;
+    
+    var domTextbox;
+    var domDurationDash;
+    var domDurationPauseChar;
+    var domDurationPauseWord;
+
+
+    (function() {
+      domTextbox = document.getElementById("textbox");
+      domDurationDash = document.getElementById("durationDash");
+      domDurationPauseChar = document.getElementById("durationPauseChar");
+      domDurationPauseWord = document.getElementById("durationPauseWord");
+ 
+      domDurationDash.value = durationDash;
+      domDurationPauseChar.value = durationPauseChar;
+      domDurationPauseWord.value = durationPauseWord;
+    })();
+
+
+    function handlerMouseDown() {
+      timeMouseDown = Date.now();
+
+      clearTimeout(timerCharPause);
+      clearTimeout(timerWordPause);
+    }
+    function handlerMouseUp() {
+      timeMouseUp = Date.now();
+      timeLastMouseUp = timeMouseUp;
+
+      var timeClick = timeMouseUp - timeMouseDown;
+      
+      if(timeClick < durationDash) {
+        domTextbox.value += CHAR_DOT;
+      } else {
+        domTextbox.value += CHAR_DASH;
+      }
+
+      timerCharPause = setTimeout(handlerTimeoutChar, durationPauseChar);
+      timerWordPause = setTimeout(handlerTimeoutWord, durationPauseWord);
+    }
+    function handlerSetDurations() {
+      var numDurationDash = parseInt(domDurationDash.value);
+      var numDurationPauseChar = parseInt(domDurationPauseChar.value);
+      var numDurationPauseWord = parseInt(domDurationPauseWord.value);
+
+      if(!isNaN(numDurationDash) && !isNaN(numDurationPauseChar) && !isNaN(numDurationPauseWord)) {
+        durationDash = numDurationDash;
+        durationPauseChar = numDurationPauseChar;
+        durationPauseWord = numDurationPauseWord;
+      } else {
+        domDurationDash.value = durationDash;
+        domDurationPauseChar.value = durationPauseChar;
+        domDurationPauseWord.value = durationPauseWord;
+      }
+    }
+    function handlerTimeoutChar() {
+      domTextbox.value += SEP_CHAR;
+    }
+    function handlerTimeoutWord() {
+      domTextbox.value += SEP_WORD;
+    }
+
+
+    function average(arr) {
+      if(arr.length === 0) {
+        return undefined;
+      }
+      var acc = arr[0];
+      for(var k=0; k<arr.length; k++) {
+        acc += arr[k];
+      }
+      return acc/arr.length;
+    }
+  </script>
+
+</html>
