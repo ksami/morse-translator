@@ -44,7 +44,7 @@
       </tr>
       <tr>
         <td>
-          <button onmousedown="handlerMouseDown()" onmouseup="handlerMouseUp()" ontouchstart="handlerMouseDown()" ontouchend="handlerMouseUp()" ontouchcancel="handlerMouseUp()" style="font-size: 36pt">TAP</button>
+          <button onmousedown="handlerMouseDown()" onmouseup="handlerMouseUp()" ontouchstart="handlerMouseDown(event)" ontouchend="handlerMouseUp(event)" style="font-size: 36pt">TAP</button>
         </td>
       </tr>
       <tr>
@@ -140,13 +140,19 @@
     })();
 
 
-    function handlerMouseDown() {
+    function handlerMouseDown(e) {
+      if(e) {
+        e.preventDefault();
+      }
       timeMouseDown = Date.now();
 
       clearTimeout(timerCharPause);
       clearTimeout(timerWordPause);
     }
-    function handlerMouseUp() {
+    function handlerMouseUp(e) {
+      if(e) {
+        e.preventDefault();
+      }
       timeMouseUp = Date.now();
       timeLastMouseUp = timeMouseUp;
 
