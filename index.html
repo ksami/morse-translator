@@ -13,6 +13,11 @@
       }
       table {
         margin-top: 50px;
+        width: 100%;
+      }
+      td {
+        padding-top: 5px;
+        padding-bottom: 5px;
       }
       textarea {
         width: 100%;
@@ -27,10 +32,12 @@
   <body>
     <h1>Morse Code Tapping Translator</h1>
     <div>
-      <p>Tap the TAP button for "dot", tap and hold for "dash", 
-         pause for a break in character, longer pause for word.</p>
-      <p>Durations can be configured below.</p>
-      <p>Website optimized for anything except humans.</p>
+      Tap the TAP button for "dot", tap and hold for "dash", 
+         pause for a break in character, longer pause for word.
+      <br /><br />
+      Durations can be configured below.
+      <br /><br />
+      Website optimized for anything except humans.
     </div>
 
     <table>
@@ -38,7 +45,7 @@
         <td colspan="4">
           <label>
             <b>Input</b>
-            <textarea id="inputTextbox"></textarea>
+            <textarea rows="5" id="inputTextbox"></textarea>
           </label>
         </td>
       </tr>
@@ -51,7 +58,7 @@
         <td colspan="4">
           <label>
             <b>Output</b>
-            <textarea id="outputTextbox"></textarea>
+            <textarea rows="5" id="outputTextbox"></textarea>
           </label>
         </td>
       </tr>
