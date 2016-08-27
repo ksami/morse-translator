@@ -6,10 +6,27 @@
   </head>
   
   <body>
+    <h1>Morse Code Tapping Translator</h1>
     <table>
       <tr>
         <td colspan="4">
-          <textarea id="textbox"></textarea>
+          <label>
+            Input
+            <textarea style="width: 100%" id="inputTextbox"></textarea>
+          </label>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <button onclick="handlerParse()">Translate</button>
+        </td>
+      </tr>
+      <tr>
+        <td colspan="4">
+          <label>
+            Output
+            <textarea style="width: 100%" id="outputTextbox"></textarea>
+          </label>
         </td>
       </tr>
       <tr>
@@ -35,8 +52,10 @@
   </body>
 
   <script type="text/javascript">
+    var MORSE_MAP = {"-----":"0",".----":"1","..---":"2","...--":"3","....-":"4",".....":"5","-....":"6","--...":"7","---..":"8","----.":"9",".-":"a","-...":"b","-.-.":"c","-..":"d",".":"e","..-.":"f","--.":"g","....":"h","..":"i",".---":"j","-.-":"k",".-..":"l","--":"m","-.":"n","---":"o",".--.":"p","--.-":"q",".-.":"r","...":"s","-":"t","..-":"u","...-":"v",".--":"w","-..-":"x","-.--":"y","--..":"z",".-.-.-":".","--..--":",","..--..":"?","-.-.--":"!","-....-":"-","-..-.":"/",".--.-.":"@","-.--.":"(","-.--.-":")"};
     var CHAR_DOT = ".";
     var CHAR_DASH = "-";
+    var CHAR_UNDEFINED = "#";
     var SEP_CHAR = " ";
     var SEP_WORD = "/ ";
 
@@ -50,14 +69,15 @@
     var timerCharPause;
     var timerWordPause;
     
-    var domTextbox;
+    var domInputTextbox;
     var domDurationDash;
     var domDurationPauseChar;
     var domDurationPauseWord;
 
 
     (function() {
-      domTextbox = document.getElementById("textbox");
+      domInputTextbox = document.getElementById("inputTextbox");
+      domOutputTextbox = document.getElementById("outputTextbox");
       domDurationDash = document.getElementById("durationDash");
       domDurationPauseChar = document.getElementById("durationPauseChar");
       domDurationPauseWord = document.getElementById("durationPauseWord");
@@ -81,9 +101,9 @@
       var timeClick = timeMouseUp - timeMouseDown;
       
       if(timeClick < durationDash) {
-        domTextbox.value += CHAR_DOT;
+        domInputTextbox.value += CHAR_DOT;
       } else {
-        domTextbox.value += CHAR_DASH;
+        domInputTextbox.value += CHAR_DASH;
       }
 
       timerCharPause = setTimeout(handlerTimeoutChar, durationPauseChar);
@@ -105,10 +125,13 @@
       }
     }
     function handlerTimeoutChar() {
-      domTextbox.value += SEP_CHAR;
+      domInputTextbox.value += SEP_CHAR;
     }
     function handlerTimeoutWord() {
-      domTextbox.value += SEP_WORD;
+      domInputTextbox.value += SEP_WORD;
+    }
+    function handlerParse() {
+      domOutputTextbox.value = parse(domInputTextbox.value);
     }
 
 
@@ -121,6 +144,29 @@
         acc += arr[k];
       }
       return acc/arr.length;
+    }
+    function parse(str) {
+      if(str.length === 0) {
+        return "";
+      }
+
+      var result = "";
+      var words = str.split(SEP_CHAR + SEP_WORD);
+      
+      for(var i=0; i<words.length; i++) {
+        var chars = words[i].split(SEP_CHAR);
+
+        for(var j=0; j<chars.length; j++) {
+          var char = MORSE_MAP[chars[j]];
+          if(char === undefined) {
+            result += CHAR_UNDEFINED;
+          } else {
+            result += char;
+          }
+        }
+        result += SEP_CHAR;
+      }
+      return result;
     }
   </script>
 
